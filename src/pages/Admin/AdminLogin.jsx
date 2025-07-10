@@ -1,53 +1,32 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import adminAPI from "./Api"; // path may vary
 
 export default function AdminLogin({ setIsAdminLoggedIn }) {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await fetch("https://productcatlog.onrender.com/admins/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await adminAPI.login(formData);
+      const token = typeof res.data === "string" ? res.data : res.data.token;
 
-      if (res.ok) {
-        const token = await res.text();
-        localStorage.setItem("adminToken", token);
-        localStorage.setItem("adminUsername", formData.username); // ✅ Store username
-        alert("Login successful");
-        setIsAdminLoggedIn(true);
-        navigate("/admin-home");
-      } else {
-        setLoginError("Invalid username or password");
-      }
+      localStorage.setItem("adminToken", token);
+      localStorage.setItem("adminUsername", formData.username);
+      alert("Login successful");
+      setIsAdminLoggedIn(true);
+      navigate("/admin-home");
     } catch (error) {
       console.error("Login error:", error);
-      setLoginError("Server error. Please try again later.");
+      setLoginError("Invalid username or password");
     }
-  };
-
-  const handleGoogleLogin = () => {
-    alert("Google login functionality to be implemented!");
-    // Future: Implement OAuth using Firebase/Auth0
   };
 
   return (
@@ -129,7 +108,7 @@ export default function AdminLogin({ setIsAdminLoggedIn }) {
             <button
               type="button"
               className="btn btn-outline-danger w-100 mt-3 d-flex align-items-center justify-content-center gap-2"
-              onClick={handleGoogleLogin}
+              //onClick={handleGoogleLogin}
             >
               <img
                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
@@ -153,5 +132,6 @@ export default function AdminLogin({ setIsAdminLoggedIn }) {
         </div>
       </div>
     </div>
-  );
+  )
+    
 }

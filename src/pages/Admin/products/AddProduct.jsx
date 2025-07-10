@@ -16,6 +16,18 @@ export default function AddProduct() {
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
 
+  const categoryOptions = [
+    "Electronics",
+    "Mobiles",
+    "Clothes",
+    "Home Appliances",
+    "Books",
+    "Sports",
+    "Beauty",
+    "Toys",
+    "Groceries",
+  ];
+
   const handleChange = (e) => {
     setProduct((prev) => ({
       ...prev,
@@ -41,7 +53,7 @@ export default function AddProduct() {
     formData.append("image", imageFile);
 
     try {
-      const res = await fetch("https://productcatlog.onrender.com/admin/product/upload", {
+      const res = await fetch("http://localhost:8080/admin/product/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
@@ -50,7 +62,6 @@ export default function AddProduct() {
       });
 
       if (res.status === 401) {
-        // Token expired or invalid
         alert("Session expired. Please log in again.");
         localStorage.removeItem("adminToken");
         navigate("/admin-login");
@@ -117,15 +128,20 @@ export default function AddProduct() {
           </div>
 
           <div className="form-floating mb-3">
-            <input
-              type="text"
+            <select
               name="category"
-              className="form-control"
-              placeholder="Category"
+              className="form-select"
               value={product.category}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select Category</option>
+              {categoryOptions.map((cat, i) => (
+                <option key={i} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
             <label>Category</label>
           </div>
 

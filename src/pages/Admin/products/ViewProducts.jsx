@@ -7,13 +7,18 @@ export default function ViewProducts() {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      // try {
+      //   const res = await fetch("https://productcatlog.onrender.com/admin/products", {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      //     },
+      //   });
       try {
-        const res = await fetch("https://productcatlog.onrender.com/admin/products", {
+        const res = await fetch("http://localhost:8080/admin/products", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           },
         });
-
         if (res.ok) {
           const data = await res.json();
           setProducts(data);
@@ -93,7 +98,8 @@ export default function ViewProducts() {
                     }}
                   >
                     <img
-                      src={`https://productcatlog.onrender.com${product.image.imagePath}`}
+                      // src={`https://productcatlog.onrender.com${product.image.imagePath}`}
+                      src={`http://localhost:8080${product.image.imagePath}`}
                       alt={product.pname}
                       style={{
                         maxHeight: "100%",

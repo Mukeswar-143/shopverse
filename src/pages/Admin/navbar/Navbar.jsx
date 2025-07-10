@@ -7,6 +7,7 @@ export default function Navbar({ isAdminLoggedIn, setIsAdminLoggedIn }) {
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminUsername");
     setIsAdminLoggedIn(false);
     navigate("/admin");
   };
