@@ -11,9 +11,12 @@ export default function AddProduct() {
     price: "",
     quantity: "",
     pdesc: "",
+    modelName: "",
+    color: "",
   });
 
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState("");
 
   const categoryOptions = [
@@ -36,7 +39,13 @@ export default function AddProduct() {
   };
 
   const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview(null);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,11 +58,11 @@ export default function AddProduct() {
     }
 
     const formData = new FormData();
-    formData.append("product", JSON.stringify(product));
+    formData.append("product", new Blob([JSON.stringify(product)], { type: "application/json" }));
     formData.append("image", imageFile);
 
     try {
-      const res = await fetch("http://localhost:8080/admin/product/upload", {
+      const res = await fetch("https://productcatlog-1.onrender.com/admin/product/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
@@ -76,8 +85,11 @@ export default function AddProduct() {
           price: "",
           quantity: "",
           pdesc: "",
+          modelName: "",
+          color: "",
         });
         setImageFile(null);
+        setImagePreview(null);
         navigate("/admin-home");
       } else {
         const msg = await res.text();
@@ -98,11 +110,10 @@ export default function AddProduct() {
       }}
     >
       <motion.div
-        className="card shadow-lg border-0 p-5"
+        className="card shadow-lg border-0 p-4 w-100"
         style={{
-          maxWidth: "600px",
-          width: "100%",
-          borderRadius: "16px",
+          maxWidth: "1200px",
+          borderRadius: "1px",
           background: "#fff",
         }}
         initial={{ opacity: 0, y: 30 }}
@@ -114,88 +125,128 @@ export default function AddProduct() {
         {error && <div className="alert alert-danger">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              name="pname"
-              className="form-control"
-              placeholder="Product Name"
-              value={product.pname}
-              onChange={handleChange}
-              required
-            />
-            <label>Product Name</label>
+          <div className="row g-4">
+            {/* Left Column: Product Info */}
+            <div className="col-md-7">
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  name="pname"
+                  className="form-control"
+                  placeholder="Product Name"
+                  value={product.pname}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Product Name</label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <select
+                  name="category"
+                  className="form-select"
+                  value={product.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {categoryOptions.map((cat, i) => (
+                    <option key={i} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <label>Category</label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <input
+                  type="number"
+                  name="price"
+                  className="form-control"
+                  placeholder="Price"
+                  value={product.price}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Price</label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  placeholder="Quantity"
+                  value={product.quantity}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Quantity</label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  name="modelName"
+                  className="form-control"
+                  placeholder="Model Name"
+                  value={product.modelName}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Model Name</label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  name="color"
+                  className="form-control"
+                  placeholder="Color"
+                  value={product.color}
+                  onChange={handleChange}
+                  required
+                />
+                <label>Color</label>
+              </div>
+
+              <div className="form-floating mb-3">
+                <textarea
+                  className="form-control"
+                  name="pdesc"
+                  placeholder="Description"
+                  style={{ height: "100px" }}
+                  value={product.pdesc}
+                  onChange={handleChange}
+                  required
+                ></textarea>
+                <label>Description</label>
+              </div>
+            </div>
+
+            {/* Right Column: Image Upload */}
+            <div className="col-md-5 d-flex flex-column align-items-center justify-content-start">
+              <label className="form-label w-100">Product Image</label>
+              <input
+                type="file"
+                className="form-control mb-3"
+                accept="image/*"
+                onChange={handleImageChange}
+                required
+              />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="img-fluid border"
+                  style={{ maxHeight: "350px", borderRadius: "10px" }}
+                />
+              )}
+            </div>
           </div>
 
-          <div className="form-floating mb-3">
-            <select
-              name="category"
-              className="form-select"
-              value={product.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Category</option>
-              {categoryOptions.map((cat, i) => (
-                <option key={i} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <label>Category</label>
-          </div>
-
-          <div className="form-floating mb-3">
-            <input
-              type="number"
-              name="price"
-              className="form-control"
-              placeholder="Price"
-              value={product.price}
-              onChange={handleChange}
-              required
-            />
-            <label>Price</label>
-          </div>
-
-          <div className="form-floating mb-3">
-            <input
-              type="number"
-              name="quantity"
-              className="form-control"
-              placeholder="Quantity"
-              value={product.quantity}
-              onChange={handleChange}
-              required
-            />
-            <label>Quantity</label>
-          </div>
-
-          <div className="form-floating mb-3">
-            <textarea
-              className="form-control"
-              name="pdesc"
-              placeholder="Description"
-              style={{ height: "100px" }}
-              value={product.pdesc}
-              onChange={handleChange}
-              required
-            ></textarea>
-            <label>Description</label>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Product Image</label>
-            <input
-              type="file"
-              className="form-control"
-              accept="image/*"
-              onChange={handleImageChange}
-              required
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-100 py-2">
+          <button type="submit" className="btn btn-primary w-100 mt-4 py-2">
             Add Product
           </button>
         </form>

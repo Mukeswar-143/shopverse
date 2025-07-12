@@ -1,7 +1,13 @@
 .custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
   height: 80px;
   padding-top: 20px;
   padding-bottom: 20px;
   font-size: 1.1rem;
-  background-color: rgb(223, 222, 222);
+  background-color: #343a40 !important; /* override to dark */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

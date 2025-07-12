@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/customer"
+const BASE_URL = "https://productcatlog-1.onrender.com/customer"
 // const BASE_URL = "https://productcatlog.onrender.com/customer";
 
 const userAPI = {

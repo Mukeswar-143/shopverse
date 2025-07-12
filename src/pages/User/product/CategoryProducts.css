@@ -1,10 +1,11 @@
+/* 🔍 Image Zoom Modal */
 .image-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7); /* dark overlay */
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,35 +13,36 @@
 }
 
 .image-modal-content {
-  background: white;
+  background: #fff;
   padding: 20px;
-  border-radius: 10px;
-  max-width: 90vw;
+  border-radius: 12px;
+  max-width: 95vw;
   max-height: 90vh;
   overflow: auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
 }
 
 .modal-controls {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
+  width: 100%;
 }
 
 .modal-controls button {
-  padding: 8px 16px;
+  padding: 8px 18px;
   font-size: 14px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.25s ease;
 }
 
 .modal-controls button:hover {
@@ -49,8 +51,129 @@
 
 .popup-image {
   max-width: 100%;
-  max-height: 100vh;
+  max-height: 75vh;
   object-fit: contain;
   border-radius: 10px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 🛒 Cart Modal */
+.cart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  background: rgba(0, 0, 0, 0.6);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Row layout for cart modal */
+.cart-modal-content.row-layout {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.cart-modal-image img {
+  width: 300px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: #f8f8f8;
+}
+
+.cart-modal-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-modal-details input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.cart-modal-details .btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.cart-modal-details .btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+
+.cart-modal-details .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}
+
+.cart-modal-details .btn:hover {
+  opacity: 0.9;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .cart-modal-content.row-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cart-modal-image img {
+    width: 100%;
+  }
+
+  .cart-modal-details {
+    width: 100%;
+  }
+}
+
+/* 📄 Clamp description to 5 lines */
+.description-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: auto;
+  max-height: 7.5em;
+}
+
+/* 🧱 Fixed card size */
+.card.h-100 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-img-top {
+  max-height: 250px;
+  object-fit: contain;
+  padding: 10px;
+  background-color: #f8f8f8;
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
